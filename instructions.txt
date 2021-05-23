@@ -1,0 +1,4 @@
+- Set folder and file name in line 13
+- Comment out line 29 (Edge detector) but leave line 19- put hashtag in front of line
+- Run the file (top right green arrow)
+-
