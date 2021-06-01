@@ -5,6 +5,7 @@ from matplotlib.colors import LinearSegmentedColormap
 from skimage import measure, exposure
 import skimage.feature
 import skimage.viewer
+import cv2
 
 
 def read_lsm_image(folder, filename, **kwargs):
@@ -15,10 +16,14 @@ def read_lsm_image(folder, filename, **kwargs):
     :param kwargs: specify kwargs to pass to the get_image() function
     :return: image file as a numpy array
     """
-    image_file = lsmreader.Lsmimage(f'{folder}//{filename}')
-    image_file.open()
-    return image_file.get_image(**kwargs)
 
+    if filename[-4:] == '.lsm':
+        image_file = lsmreader.Lsmimage(f'{folder}//{filename}')
+        image_file.open()
+        return image_file.get_image(**kwargs)
+
+    elif filename[-4:] == '.jpg':
+        return cv2.imread(f'{folder}//{filename}', 0)
 
 
 # from PIL import Image, ImageEnhance

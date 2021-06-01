@@ -63,7 +63,7 @@ def mix_images(image_red, image_green):
     sfact = Slider(axfact, 'Factor', 0, 2, valinit=fact, valstep=0.01)
 
     def _update(val):
-        print(sfact.val)
+        # print(sfact.val)
         update_im = np.where(image_red - (image_green * sfact.val) < 0, 0, image_red - (image_green * sfact.val))
         # update_im = np.clip(image_red - (image_green * sfact.val), a_min=0, a_max=256)
         im1.set_data(update_im)
@@ -127,35 +127,39 @@ def adjustable_detector(image):
     axsig = fig.add_axes([0.25, 0.25, 0.65, 0.03], facecolor=axcolor)
     axsize = fig.add_axes([0.25, 0.3, 0.65, 0.03], facecolor=axcolor)
 
-    axmin = fig.add_axes([0.25, 0.1, 0.65, 0.03], facecolor=axcolor)
+    # axmin = fig.add_axes([0.25, 0.1, 0.65, 0.03], facecolor=axcolor)
     axmax = fig.add_axes([0.25, 0.15, 0.65, 0.03], facecolor=axcolor)
-    axbrg = fig.add_axes([0.25, 0.2, 0.65, 0.03], facecolor=axcolor)
+    # axbrg = fig.add_axes([0.25, 0.2, 0.65, 0.03], facecolor=axcolor)
 
     ssig = Slider(axsig, 'Sigma', 0.1, 10, valinit=sig0, valstep=0.1)
     ssize = Slider(axsize, 'Size', 0, 100, valinit=size0, valstep=1)
 
-    smin = Slider(axmin, 'Contrast', 0, 2, valinit=min0, valstep=0.01)
+    # smin = Slider(axmin, 'Contrast', 0, 2, valinit=min0, valstep=0.01)
     smax = Slider(axmax, 'Mask', 0, 256, valinit=max0, valstep=1)
-    sbrg = Slider(axbrg, 'Brightness', -128, 128, valinit=brg0, valstep=1)
+    # sbrg = Slider(axbrg, 'Brightness', -128, 128, valinit=brg0, valstep=1)
 
     def _update(val):
-        update_im = np.clip(adjust_contrast(image * (image >= smax.val), contrast=smin.val) + sbrg.val, 0, 256)
-        edges = skimage.feature.canny(image=image, sigma=ssig.val)
+        # update_im = np.clip(adjust_contrast(image * (image >= smax.val), contrast=smin.val) + sbrg.val, 0, 256) #!!!!
+        update_im = image * (image >= smax.val)
+        edges = skimage.feature.canny(image=update_im, sigma=ssig.val)
         segs = measure.regionprops(measure.label(edges))
         all_coords = np.zeros([1, 2])
+        qualified_segments = []
         for seg in segs:
-            if seg.convex_area > ssize.val:
+            if seg.filled_area > ssize.val:
                 all_coords = np.concatenate([seg.coords, all_coords])
+                qualified_segments.append(seg)
 
         outlines.set_offsets(np.flip(all_coords))
         im1.set_data(update_im)
+        ax.set_title(f'Average vessel width: {np.mean([seg.minor_axis_length for seg in qualified_segments])}'
+                     f'\nNumber of vessels: {len(qualified_segments)}')
         fig.canvas.draw()
-
 
     ssig.on_changed(_update)
     ssize.on_changed(_update)
-    smin.on_changed(_update)
+    # smin.on_changed(_update)
     smax.on_changed(_update)
-    sbrg.on_changed(_update)
+    # sbrg.on_changed(_update)
     plt.show()
 
