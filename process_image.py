@@ -11,8 +11,8 @@ util.register_fiji_cmap_red('imageJ-red-black')
 util.register_fiji_cmap_green('imageJ-green-black')
 
 # Read LSM image
-folder_name = 'images//4275'
-image_name = '25.jpg'
+folder_name = 'images//4276'
+image_name = '24.jpg'
 
 raw_image_data_red = read_lsm_image(folder_name, image_name, stack=0, channel=0)
 # raw_image_data_green = read_lsm_image(folder_name, image_name, stack=0, channel=1)

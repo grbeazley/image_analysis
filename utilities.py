@@ -105,7 +105,7 @@ def mix_images(image_red, image_green):
 def adjustable_detector(image):
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    fig.subplots_adjust(bottom=0.35)
+    fig.subplots_adjust(bottom=0.2)
     sig0 = 3
     size0 = 25
 
@@ -124,11 +124,11 @@ def adjustable_detector(image):
     outlines = ax.scatter(all_coords[:, 1], all_coords[:, 0], 0.1)
 
     axcolor = 'lightgoldenrodyellow'
-    axsig = fig.add_axes([0.25, 0.25, 0.65, 0.03], facecolor=axcolor)
-    axsize = fig.add_axes([0.25, 0.3, 0.65, 0.03], facecolor=axcolor)
+    axsig = fig.add_axes([0.25, 0.15, 0.65, 0.03], facecolor=axcolor)
+    axsize = fig.add_axes([0.25, 0.1, 0.65, 0.03], facecolor=axcolor)
 
     # axmin = fig.add_axes([0.25, 0.1, 0.65, 0.03], facecolor=axcolor)
-    axmax = fig.add_axes([0.25, 0.15, 0.65, 0.03], facecolor=axcolor)
+    axmax = fig.add_axes([0.25, 0.05, 0.65, 0.03], facecolor=axcolor)
     # axbrg = fig.add_axes([0.25, 0.2, 0.65, 0.03], facecolor=axcolor)
 
     ssig = Slider(axsig, 'Sigma', 0.1, 10, valinit=sig0, valstep=0.1)
